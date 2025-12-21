@@ -145,3 +145,93 @@ FOREIGN KEY (player_id) REFERENCES players(id);
 -- История -> Типы очередей
 ALTER TABLE matchmaking_history ADD CONSTRAINT fk_history_queue 
 FOREIGN KEY (queue_id) REFERENCES matchmaking_queues(id);
+
+-- Данные
+
+INSERT INTO players (username, skill_rating, wins_count, losses_count) VALUES
+('Tamori', 1500, 10, 5),
+('AndreyPRO100', 1600, 6, 10),
+('Ivan2004', 1600, 2, 3),
+('qwerty', 1600, 14, 1),
+('Anuytick_jpg', 1600, 15, 8);
+
+INSERT INTO clans (name, tag, leader_id, clan_rating, members_count) VALUES
+('PupupuClan', '[PUPUPU]', 1, 1550, 2),
+('LeleleClan', '[LELELE]', 2, 3000, 5);
+
+UPDATE players SET clan_id = 1 WHERE id IN (1, 2);
+UPDATE players SET clan_id = 2 WHERE id IN (3, 4, 5);
+
+INSERT INTO heroes (name, role) VALUES
+('Jett', 'Duelist'),
+('Sage', 'Sentinel'),
+('Clove', 'Controller'),
+('Reyna', 'Duelist'),
+('Gekko', 'Initiator'),
+('Phoenix', 'Duelist');
+
+INSERT INTO maps (name) VALUES
+('Lotus'),
+('Bind'),
+('Abyss'),
+('Pearl'),
+('Heaven');
+
+INSERT INTO matchmaking_queues (name, team_size, rating_tolerance) VALUES
+('Casual 1v1', 1, 300),
+('Ranked 5v5', 5, 200),
+('Unrated', 5, 500);
+
+INSERT INTO matches (queue_id, map_id, status, average_rating, rating_disparity) VALUES
+(1, 1, 'finished', 1550, 100),
+(2, 2, 'finished', 1600, 150),
+(2, 3, 'finished', 1580, 120),
+(3, 4, 'finished', 1620, 200),
+(3, 5, 'finished', 1570, 180);
+
+
+INSERT INTO teams (match_id, team_number, side, average_rating, result) VALUES
+-- 1
+(1, 1, 'blue', 1500, 'win'),
+(1, 2, 'red', 1600, 'loss'),
+-- 2
+(2, 1, 'blue', 1550, 'win'),
+(2, 2, 'red', 1650, 'loss'),
+-- 3
+(3, 1, 'blue', 1520, 'loss'),
+(3, 2, 'red', 1640, 'win'),
+-- 4
+(4, 1, 'blue', 1500, 'win'),
+(4, 2, 'red', 1740, 'loss'),
+-- 5
+(5, 1, 'blue', 1490, 'loss'),
+(5, 2, 'red', 1650, 'win');
+
+
+INSERT INTO player_match_performance (player_id, match_id, team_id, hero_id, kills, deaths, rating_change) VALUES
+-- 1
+(1, 1, 1, 1, 10, 3, +25),  -- тмр джетт
+(2, 1, 2, 2, 8, 5, -15),   -- андрей сейдж
+-- 2
+(1, 2, 3, 1, 15, 8, +20),  -- тмр джетт
+(2, 2, 4, 3, 12, 10, -10), -- андрей клов
+(3, 2, 3, 4, 10, 7, +18),  -- иван рейна
+(4, 2, 4, 5, 8, 12, -12),  -- кверти гекко
+(5, 2, 3, 6, 14, 6, +22),  -- джпг феникс
+-- 3
+(1, 3, 5, 1, 18, 5, +30),  -- тмр джетт
+(2, 3, 6, 2, 9, 11, -18),  -- андрей сейдж
+(3, 3, 6, 4, 13, 8, +25),  -- иван рейна
+-- 4
+(4, 4, 7, 5, 11, 9, +15),  -- кверти гекко
+(5, 4, 8, 6, 16, 4, +28),  -- джпг феникс
+-- 5
+(1, 5, 9, 1, 12, 10, -5),  -- тмр джетт
+(4, 5, 10, 3, 14, 7, +20); -- кверти клов
+
+INSERT INTO matchmaking_history (player_id, queue_id, join_time, match_found_time, total_wait_seconds) VALUES
+(1, 1, '2024-01-15 14:00:00', '2024-01-15 14:01:30', 90),
+(2, 1, '2024-01-15 14:00:10', '2024-01-15 14:01:30', 80),
+(1, 2, '2024-01-15 15:00:00', '2024-01-15 15:02:00', 120),
+(2, 2, '2024-01-15 15:00:30', '2024-01-15 15:02:00', 90),
+(3, 2, '2024-01-15 15:00:45', '2024-01-15 15:02:00', 75);
