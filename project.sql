@@ -92,3 +92,56 @@ CREATE TABLE IF NOT EXISTS matchmaking_history (
     total_wait_seconds INT
 );
 
+-- Ключи для связей таблиц
+
+-- Игроки -> Кланы
+ALTER TABLE players ADD CONSTRAINT fk_players_clan 
+FOREIGN KEY (clan_id) REFERENCES clans(id);
+
+-- Кланы -> Лидер (игроки)
+ALTER TABLE clans ADD CONSTRAINT fk_clans_leader 
+FOREIGN KEY (leader_id) REFERENCES players(id);
+
+-- Игроки в очереди -> Игроки
+ALTER TABLE queue_entries ADD CONSTRAINT fk_queue_entries_player 
+FOREIGN KEY (player_id) REFERENCES players(id);
+
+-- Игроки в очереди -> Типы очередей
+ALTER TABLE queue_entries ADD CONSTRAINT fk_queue_entries_queue 
+FOREIGN KEY (queue_id) REFERENCES matchmaking_queues(id);
+
+-- Матчи -> Типы очередей
+ALTER TABLE matches ADD CONSTRAINT fk_matches_queue 
+FOREIGN KEY (queue_id) REFERENCES matchmaking_queues(id);
+
+-- Матчи -> Карты
+ALTER TABLE matches ADD CONSTRAINT fk_matches_map 
+FOREIGN KEY (map_id) REFERENCES maps(id);
+
+-- Команды -> Матчи
+ALTER TABLE teams ADD CONSTRAINT fk_teams_match 
+FOREIGN KEY (match_id) REFERENCES matches(id);
+
+-- Статистика -> Игроки
+ALTER TABLE player_match_performance ADD CONSTRAINT fk_performance_player 
+FOREIGN KEY (player_id) REFERENCES players(id);
+
+-- Статистика -> Матчи
+ALTER TABLE player_match_performance ADD CONSTRAINT fk_performance_match 
+FOREIGN KEY (match_id) REFERENCES matches(id);
+
+-- Статистика -> Команды
+ALTER TABLE player_match_performance ADD CONSTRAINT fk_performance_team 
+FOREIGN KEY (team_id) REFERENCES teams(id);
+
+-- Статистика -> Герои
+ALTER TABLE player_match_performance ADD CONSTRAINT fk_performance_hero 
+FOREIGN KEY (hero_id) REFERENCES heroes(id);
+
+-- История -> Игроки
+ALTER TABLE matchmaking_history ADD CONSTRAINT fk_history_player 
+FOREIGN KEY (player_id) REFERENCES players(id);
+
+-- История -> Типы очередей
+ALTER TABLE matchmaking_history ADD CONSTRAINT fk_history_queue 
+FOREIGN KEY (queue_id) REFERENCES matchmaking_queues(id);
